@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSwap - Share Skills, Grow Together</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-exchange-alt me-2"></i>SkillSwap
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="form-check form-switch me-3">
+                        <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                        <label class="form-check-label text-white" for="darkModeToggle">
+                            <i class="fas fa-moon"></i>
+                        </label>
+                    </div>
+                    <button class="btn btn-outline-light me-2" onclick="location.href='auth.html'">Login</button>
+                    <button class="btn btn-light" onclick="location.href='auth.html?mode=signup'">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section bg-gradient-primary text-white py-5">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">Share Your Skills, Learn From Others</h1>
+                    <p class="lead mb-4">Connect with passionate individuals, exchange knowledge, and grow together in a community built on mutual learning.</p>
+                    <div class="d-flex gap-3">
+                        <button class="btn btn-light btn-lg px-4" onclick="location.href='auth.html?mode=signup'">
+                            Get Started <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                        <button class="btn btn-outline-light btn-lg px-4" onclick="location.href='#how-it-works'">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image mt-5 mt-lg-0">
+                        <div class="floating-card card-1">
+                            <i class="fas fa-code text-primary"></i>
+                            <span>Web Development</span>
+                        </div>
+                        <div class="floating-card card-2">
+                            <i class="fas fa-music text-success"></i>
+                            <span>Music Lessons</span>
+                        </div>
+                        <div class="floating-card card-3">
+                            <i class="fas fa-language text-warning"></i>
+                            <span>Language Exchange</span>
+                        </div>
+                        <div class="floating-card card-4">
+                            <i class="fas fa-paint-brush text-danger"></i>
+                            <span>Design Skills</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5 bg-light">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">Why Choose SkillSwap?</h2>
+                <p class="lead text-muted">Everything you need for effective skill sharing</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h5 class="card-title">Smart Matching</h5>
+                            <p class="card-text text-muted">Find perfect skill exchange partners based on your interests and availability.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <h5 class="card-title">Video Sessions</h5>
+                            <p class="card-text text-muted">Seamless video calls integrated with Jitsi Meet for real-time learning.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-warning text-white rounded-circle mx-auto mb-3">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <h5 class="card-title">Real-time Chat</h5>
+                            <p class="card-text text-muted">Communicate with your learning partners through our integrated chat system.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-5">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">How It Works</h2>
+                <p class="lead text-muted">Get started in 4 simple steps</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="step-number bg-primary text-white rounded-circle mx-auto mb-3">1</div>
+                        <h5>Create Profile</h5>
+                        <p class="text-muted">List skills you can teach and skills you want to learn</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="step-number bg-success text-white rounded-circle mx-auto mb-3">2</div>
+                        <h5>Find Partners</h5>
+                        <p class="text-muted">Discover users with matching skills and interests</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="step-number bg-warning text-white rounded-circle mx-auto mb-3">3</div>
+                        <h5>Schedule Sessions</h5>
+                        <p class="text-muted">Book skill-sharing sessions at mutual convenience</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="step-number bg-info text-white rounded-circle mx-auto mb-3">4</div>
+                        <h5>Learn & Grow</h5>
+                        <p class="text-muted">Connect via video call and start exchanging knowledge</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fas fa-exchange-alt me-2"></i>SkillSwap</h5>
+                    <p class="text-muted">Building a community of lifelong learners.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted">&copy; 2024 SkillSwap. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Firebase SDKs FIRST -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
