@@ -31,10 +31,24 @@ async function initializeDashboard() {
     
     try {
         await loadUserProfile();
-        await loadUpcomingSessions();
-        await loadSuggestedMatches();
-        await loadRecentActivity();
-        updateStats();
+        
+        // Check if user is new to customize their experience
+        const isNewUser = await checkIfNewUser(firebase.auth().currentUser.uid);
+        
+        if (isNewUser) {
+            // For new users, focus on profile completion and guidance
+            await loadSuggestedMatches(); // Still show potential matches
+            updateStats();
+            
+            // Customize the empty state messages for new users
+            customizeForNewUser();
+        } else {
+            // For returning users, load everything normally
+            await loadUpcomingSessions();
+            await loadSuggestedMatches();
+            await loadRecentActivity();
+            updateStats();
+        }
         
         console.log('Dashboard: Initialization completed successfully');
     } catch (error) {
@@ -63,11 +77,25 @@ async function loadUserProfile() {
         if (userDoc.exists) {
             userProfile = userDoc.data();
             console.log('User profile loaded:', userProfile);
-            document.getElementById('userName').textContent = userProfile.displayName || 'User';
+            
+            // Check if user is new (no sessions and minimal profile)
+            const isNewUser = await checkIfNewUser(user.uid);
+            
+            if (isNewUser) {
+                document.getElementById('userName').textContent = 'Welcome!';
+                showNewUserWelcome();
+            } else {
+                document.getElementById('userName').textContent = `Welcome back, ${userProfile.displayName || 'User'}!`;
+            }
         } else {
             console.log('User profile does not exist, creating...');
             // Create user profile if it doesn't exist
             await createUserProfile(user);
+            
+            // New user - show welcome message
+            document.getElementById('userName').textContent = 'Welcome!';
+            showNewUserWelcome();
+            
             await loadUserProfile(); // Reload
         }
     } catch (error) {
@@ -76,6 +104,158 @@ async function loadUserProfile() {
             showToast('Database permissions not set up yet. Please contact administrator.', 'error');
         }
         throw error;
+    }
+}
+
+// Check if user is new
+async function checkIfNewUser(userId) {
+    try {
+        // Check if user has any sessions
+        const sessionsSnapshot = await firebase.firestore()
+            .collection('sessions')
+            .where('participants', 'array-contains', userId)
+            .limit(1)
+            .get();
+
+        const hasSessions = !sessionsSnapshot.empty;
+        
+        // Check if user has completed their profile (has skills added)
+        const userDoc = await firebase.firestore()
+            .collection('users')
+            .doc(userId)
+            .get();
+            
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            const hasSkills = (userData.skillsToTeach && userData.skillsToTeach.length > 0) || 
+                             (userData.skillsToLearn && userData.skillsToLearn.length > 0);
+            
+            // User is considered new if they have no sessions and minimal profile
+            return !hasSessions && !hasSkills;
+        }
+        
+        return true; // If we can't determine, assume new user
+        
+    } catch (error) {
+        console.error('Error checking if user is new:', error);
+        return true; // Assume new user if there's an error
+    }
+}
+
+// Show new user welcome
+function showNewUserWelcome() {
+    // Update the dashboard header for new users
+    const dashboardHeader = document.querySelector('.dashboard-header');
+    if (dashboardHeader) {
+        const subtitle = dashboardHeader.querySelector('p.lead');
+        if (subtitle) {
+            subtitle.textContent = "Let's set up your profile and find your first skill match!";
+            subtitle.style.fontSize = '1.1rem';
+            subtitle.style.fontWeight = '500';
+        }
+    }
+    
+    // Show a welcome toast
+    showToast('🎉 Welcome to SkillSwap! Complete your profile to get started.', 'success');
+    
+    // Show new user guide
+    setTimeout(() => {
+        showNewUserGuide();
+    }, 2000);
+}
+
+// Show new user guide modal
+function showNewUserGuide() {
+    // Check if we've shown the guide before
+    const hasSeenGuide = localStorage.getItem('hasSeenSkillSwapGuide');
+    
+    if (!hasSeenGuide) {
+        const guideHTML = `
+            <div class="modal fade" id="newUserGuideModal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title">🎉 Welcome to SkillSwap!</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row text-center">
+                                <div class="col-md-4 mb-4">
+                                    <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-user-edit fa-lg"></i>
+                                    </div>
+                                    <h6>Complete Your Profile</h6>
+                                    <p class="text-muted small">Add skills you can teach and want to learn</p>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-search fa-lg"></i>
+                                    </div>
+                                    <h6>Find Matches</h6>
+                                    <p class="text-muted small">Discover users with complementary skills</p>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="feature-icon bg-warning text-white rounded-circle mx-auto mb-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-video fa-lg"></i>
+                                    </div>
+                                    <h6>Start Learning</h6>
+                                    <p class="text-muted small">Schedule sessions and begin your journey</p>
+                                </div>
+                            </div>
+                            <div class="text-center mt-4">
+                                <a href="profile.html" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-user-edit me-2"></i>Complete Your Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Add modal to page
+        document.body.insertAdjacentHTML('beforeend', guideHTML);
+        
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('newUserGuideModal'));
+        modal.show();
+        
+        // Mark as seen
+        localStorage.setItem('hasSeenSkillSwapGuide', 'true');
+        
+        // Remove modal from DOM after hiding
+        document.getElementById('newUserGuideModal').addEventListener('hidden.bs.modal', function() {
+            this.remove();
+        });
+    }
+}
+
+// Customize dashboard for new users
+function customizeForNewUser() {
+    // Update empty states with more encouraging messages
+    const upcomingSessionsList = document.getElementById('upcomingSessionsList');
+    if (upcomingSessionsList) {
+        upcomingSessionsList.innerHTML = `
+            <div class="text-center py-4">
+                <i class="fas fa-calendar-plus text-primary fa-3x mb-3"></i>
+                <h5 class="text-muted">Schedule Your First Session</h5>
+                <p class="text-muted small mb-3">Start your skill-sharing journey by booking your first session</p>
+                <button class="btn btn-primary mt-2" onclick="location.href='sessions.html?action=schedule'">
+                    <i class="fas fa-plus me-2"></i>Schedule Session
+                </button>
+            </div>
+        `;
+    }
+    
+    const recentActivityList = document.getElementById('recentActivityList');
+    if (recentActivityList) {
+        recentActivityList.innerHTML = `
+            <div class="text-center py-4">
+                <i class="fas fa-star text-warning fa-2x mb-3"></i>
+                <h6 class="text-muted">Your Journey Starts Here</h6>
+                <p class="text-muted small">Complete your profile and schedule sessions to see your activity here</p>
+            </div>
+        `;
     }
 }
 
@@ -427,13 +607,6 @@ async function loadRecentActivity() {
         
     } catch (error) {
         console.error('Error loading recent activity:', error);
-        document.getElementById('recentActivityList').innerHTML = `
-            <div class="text-center py-4">
-                <i class="fas fa-exclamation-triangle text-warning fa-2x mb-3"></i>
-                <p class="text-muted">Unable to load recent activity</p>
-                <p class="text-muted small">${getErrorMessage(error)}</p>
-            </div>
-        `;
         throw error;
     }
 }
