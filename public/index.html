@@ -1,75 +1,469 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkillSwap - Share Skills, Grow Together</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --light: #F8FAFC;
+            --dark: #1E293B;
+            --text: #475569;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-dark) !important;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            color: var(--text) !important;
+            margin: 0 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary) !important;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-outline-primary {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff" fill-opacity="0.05" points="0,1000 1000,0 1000,1000"/></svg>');
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .hero-visual {
+            position: relative;
+            height: 500px;
+        }
+        
+        .floating-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+            animation: float 6s ease-in-out infinite;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .floating-card i {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .card-1 {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+        
+        .card-2 {
+            top: 5%;
+            right: 10%;
+            animation-delay: 1s;
+        }
+        
+        .card-3 {
+            bottom: 30%;
+            left: 0;
+            animation-delay: 2s;
+        }
+        
+        .card-4 {
+            bottom: 15%;
+            right: 5%;
+            animation-delay: 3s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        
+        /* Features Section */
+        .features-section {
+            padding: 100px 0;
+            background: var(--light);
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .section-subtitle {
+            font-size: 1.1rem;
+            text-align: center;
+            color: var(--text);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .feature-description {
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 100px 0;
+            background: white;
+        }
+        
+        .step-card {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .step-description {
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 100px 0;
+            color: white;
+            text-align: center;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-description {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            opacity: 0.7;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .floating-card {
+                position: relative;
+                margin: 1rem 0;
+                animation: none;
+            }
+            
+            .hero-visual {
+                height: auto;
+                margin-top: 3rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">
+            <a class="navbar-brand" href="index.html">
                 <i class="fas fa-exchange-alt me-2"></i>SkillSwap
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                <ul class="navbar-nav mx-auto">
                     <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
                     <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#community">Community</a></li>
                 </ul>
                 <div class="d-flex align-items-center">
-                    <div class="form-check form-switch me-3">
-                        <input class="form-check-input" type="checkbox" id="darkModeToggle">
-                        <label class="form-check-label text-white" for="darkModeToggle">
-                            <i class="fas fa-moon"></i>
-                        </label>
-                    </div>
-                    <button class="btn btn-outline-light me-2" onclick="location.href='auth.html'">Login</button>
-                    <button class="btn btn-light" onclick="location.href='auth.html?mode=signup'">Sign Up</button>
+                    <a href="auth.html" class="btn btn-outline-primary me-2">Sign In</a>
+                    <a href="auth.html?mode=signup" class="btn btn-primary">Get Started</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-section bg-gradient-primary text-white py-5">
-        <div class="container py-5">
+    <section class="hero-section">
+        <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6">
-                    <h1 class="display-4 fw-bold mb-4">Share Your Skills, Learn From Others</h1>
-                    <p class="lead mb-4">Connect with passionate individuals, exchange knowledge, and grow together in a community built on mutual learning.</p>
-                    <div class="d-flex gap-3">
-                        <button class="btn btn-light btn-lg px-4" onclick="location.href='auth.html?mode=signup'">
-                            Get Started <i class="fas fa-arrow-right ms-2"></i>
-                        </button>
-                        <button class="btn btn-outline-light btn-lg px-4" onclick="location.href='#how-it-works'">
-                            Learn More
-                        </button>
+                    <div class="hero-content">
+                        <h1 class="hero-title fade-in">
+                            Share Your Skills,<br>
+                            <span style="background: linear-gradient(135deg, #FFD700, #FFA500); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Learn From Others</span>
+                        </h1>
+                        <p class="hero-subtitle fade-in">
+                            Join a vibrant community where knowledge meets opportunity. 
+                            Teach what you know, learn what you don't, and grow together 
+                            with passionate learners worldwide.
+                        </p>
+                        <div class="hero-buttons fade-in">
+                            <a href="auth.html?mode=signup" class="btn btn-primary btn-lg">
+                                Start Learning <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                            <a href="#features" class="btn btn-outline-primary btn-lg">
+                                Learn More
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="hero-image mt-5 mt-lg-0">
+                    <div class="hero-visual">
                         <div class="floating-card card-1">
-                            <i class="fas fa-code text-primary"></i>
+                            <i class="fas fa-code"></i>
                             <span>Web Development</span>
                         </div>
                         <div class="floating-card card-2">
-                            <i class="fas fa-music text-success"></i>
+                            <i class="fas fa-music"></i>
                             <span>Music Lessons</span>
                         </div>
                         <div class="floating-card card-3">
-                            <i class="fas fa-language text-warning"></i>
+                            <i class="fas fa-language"></i>
                             <span>Language Exchange</span>
                         </div>
                         <div class="floating-card card-4">
-                            <i class="fas fa-paint-brush text-danger"></i>
+                            <i class="fas fa-paint-brush"></i>
                             <span>Design Skills</span>
                         </div>
                     </div>
@@ -79,44 +473,49 @@
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="py-5 bg-light">
-        <div class="container py-5">
+    <section id="features" class="features-section">
+        <div class="container">
             <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold mb-3">Why Choose SkillSwap?</h2>
-                <p class="lead text-muted">Everything you need for effective skill sharing</p>
+                <h2 class="section-title fade-in">Why Choose SkillSwap?</h2>
+                <p class="section-subtitle fade-in">
+                    Everything you need for effective skill sharing in one beautiful platform
+                </p>
             </div>
             <div class="row g-4">
                 <div class="col-md-4">
-                    <div class="feature-card card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3">
-                                <i class="fas fa-search"></i>
-                            </div>
-                            <h5 class="card-title">Smart Matching</h5>
-                            <p class="card-text text-muted">Find perfect skill exchange partners based on your interests and availability.</p>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                            <i class="fas fa-search"></i>
                         </div>
+                        <h3 class="feature-title">Smart Matching</h3>
+                        <p class="feature-description">
+                            Find perfect skill exchange partners based on your interests, 
+                            availability, and learning goals with our intelligent matching algorithm.
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="feature-card card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3">
-                                <i class="fas fa-video"></i>
-                            </div>
-                            <h5 class="card-title">Video Sessions</h5>
-                            <p class="card-text text-muted">Seamless video calls integrated with Jitsi Meet for real-time learning.</p>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                            <i class="fas fa-video"></i>
                         </div>
+                        <h3 class="feature-title">Seamless Video Calls</h3>
+                        <p class="feature-description">
+                            High-quality video sessions integrated with Jitsi Meet. 
+                            No downloads required - just click and start learning together.
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="feature-card card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon bg-warning text-white rounded-circle mx-auto mb-3">
-                                <i class="fas fa-comments"></i>
-                            </div>
-                            <h5 class="card-title">Real-time Chat</h5>
-                            <p class="card-text text-muted">Communicate with your learning partners through our integrated chat system.</p>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">
+                            <i class="fas fa-comments"></i>
                         </div>
+                        <h3 class="feature-title">Real-time Chat</h3>
+                        <p class="feature-description">
+                            Stay connected with your learning partners through our 
+                            integrated chat system. Share resources and coordinate schedules easily.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -124,64 +523,164 @@
     </section>
 
     <!-- How It Works -->
-    <section id="how-it-works" class="py-5">
-        <div class="container py-5">
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
             <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold mb-3">How It Works</h2>
-                <p class="lead text-muted">Get started in 4 simple steps</p>
+                <h2 class="section-title fade-in">How It Works</h2>
+                <p class="section-subtitle fade-in">
+                    Get started with SkillSwap in four simple steps
+                </p>
             </div>
             <div class="row g-4">
                 <div class="col-md-3">
-                    <div class="text-center">
-                        <div class="step-number bg-primary text-white rounded-circle mx-auto mb-3">1</div>
-                        <h5>Create Profile</h5>
-                        <p class="text-muted">List skills you can teach and skills you want to learn</p>
+                    <div class="step-card fade-in">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Create Profile</h3>
+                        <p class="step-description">
+                            List skills you can teach and skills you want to learn. 
+                            Showcase your expertise and learning goals.
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="text-center">
-                        <div class="step-number bg-success text-white rounded-circle mx-auto mb-3">2</div>
-                        <h5>Find Partners</h5>
-                        <p class="text-muted">Discover users with matching skills and interests</p>
+                    <div class="step-card fade-in">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Find Partners</h3>
+                        <p class="step-description">
+                            Discover users with matching skills and interests. 
+                            Our algorithm suggests the best matches for you.
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="text-center">
-                        <div class="step-number bg-warning text-white rounded-circle mx-auto mb-3">3</div>
-                        <h5>Schedule Sessions</h5>
-                        <p class="text-muted">Book skill-sharing sessions at mutual convenience</p>
+                    <div class="step-card fade-in">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Schedule Sessions</h3>
+                        <p class="step-description">
+                            Book skill-sharing sessions at mutual convenience. 
+                            Integrated calendar makes scheduling effortless.
+                        </p>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="text-center">
-                        <div class="step-number bg-info text-white rounded-circle mx-auto mb-3">4</div>
-                        <h5>Learn & Grow</h5>
-                        <p class="text-muted">Connect via video call and start exchanging knowledge</p>
+                    <div class="step-card fade-in">
+                        <div class="step-number">4</div>
+                        <h3 class="step-title">Learn & Grow</h3>
+                        <p class="step-description">
+                            Connect via video call and start exchanging knowledge. 
+                            Track your progress and build meaningful connections.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="cta-title fade-in">Ready to Start Your Learning Journey?</h2>
+            <p class="cta-description fade-in">
+                Join thousands of learners who are already sharing skills and growing together 
+                on our platform. Your next learning adventure is just a click away.
+            </p>
+            <a href="auth.html?mode=signup" class="btn btn-light btn-lg">
+                Join SkillSwap Today <i class="fas fa-rocket ms-2"></i>
+            </a>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="bg-dark text-white py-4">
+    <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
-                    <h5><i class="fas fa-exchange-alt me-2"></i>SkillSwap</h5>
-                    <p class="text-muted">Building a community of lifelong learners.</p>
+                <div class="col-lg-4 mb-4">
+                    <div class="footer-brand">
+                        <i class="fas fa-exchange-alt me-2"></i>SkillSwap
+                    </div>
+                    <p class="footer-description">
+                        Building a global community of lifelong learners. 
+                        Share knowledge, gain skills, and grow together.
+                    </p>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <p class="text-muted">&copy; 2024 SkillSwap. All rights reserved.</p>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5>Platform</h5>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#community">Community</a></li>
+                        <li><a href="auth.html">Sign In</a></li>
+                    </ul>
                 </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5>Support</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5>Connect</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SkillSwap. All rights reserved. Made with ❤️ for learners worldwide.</p>
             </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Firebase SDKs FIRST -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="js/main.js"></script>
+    <script>
+        // Scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(element => {
+                fadeObserver.observe(element);
+            });
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Navbar background on scroll
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 100) {
+                    navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                    navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+                } else {
+                    navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                    navbar.style.boxShadow = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
